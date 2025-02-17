@@ -1,15 +1,26 @@
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 
 import tailwindcss from '@tailwindcss/vite';
 
-export default {
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  server: {
+    allowedHosts: true,
+  },
+  build: {
+    target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
   optimizeDeps: {
     esbuildOptions: {
       target: 'esnext',
     },
   },
-  plugins: [react(), tailwindcss()],
-  server: {
-    allowedHosts: true,
-  },
-};
+});

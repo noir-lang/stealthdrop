@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../Button.tsx';
 import { CheckmarkIcon } from '../Icons/CheckmarkIcon.tsx';
 import { StepContainer } from './StepContainer.tsx';
-import { type StepProps } from '../../../../../types.ts';
+import { type StepProps } from '../../../../types.ts';
 import { useAccount, useConnect, useConnectors } from 'wagmi';
 import { useEligibleAddresses } from '../../hooks/useEligibleAddresses.tsx';
 import { useClaim } from '../../hooks/useClaimer.ts';

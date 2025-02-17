@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 import { LeanIMT } from '@zk-kit/lean-imt';
-import merkle from '../../../../utils/mt/merkle.json' with { type: 'json' };
+import merkle from '../../../../utils/merkle.json' with { type: 'json' };
 import { BarretenbergSync, Fr } from '@aztec/bb.js';
 
 export const MerkleTreeContext = createContext<LeanIMT | null>(null);

@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { computeAllInputs } from 'plume-sig';
-import { MESSAGE_TO_HASH } from '../../../../utils/const.cts';
-import { type PlumeSignature } from '../../../../types.ts';
-import eligible from '../../../../utils/mt/eligible.json' with { type: 'json' };
+import { MESSAGE_TO_HASH } from '../../../const.cts';
+import { type PlumeSignature } from '../../../types.ts';
+import eligible from '../../../../utils/eligible.json' with { type: 'json' };
 
 export function usePlume() {
   const [plume, setPlume] = useState<PlumeSignature>();

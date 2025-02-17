@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '../Button.tsx';
 import { StepContainer } from './StepContainer.tsx';
-import { type StepProps } from '../../../../../types.ts';
+import { type StepProps } from '../../../../types.ts';
 import { useEligibleAddresses } from '../../hooks/useEligibleAddresses.tsx';
 
 export const SignMessageStep: React.FC<StepProps> = ({

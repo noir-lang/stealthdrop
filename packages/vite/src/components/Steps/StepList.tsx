@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ConnectWalletStep } from './01-ConnectWalletStep.tsx';
 import { SignMessageStep } from './02-SignMessageStep.tsx';
 import { ClaimStep } from './03-ClaimStep.tsx';
-import type { Step, StepProps, StepListProps } from '../../../../../types.ts';
+import type { Step, StepProps, StepListProps } from '../../../../types.ts';
 import { usePlume } from '../../hooks/usePlume.ts';
 
 const steps: Step[] = [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../Button.tsx';
 import { StepContainer } from './StepContainer.tsx';
-import { type StepProps } from '../../../../../types.ts';
+import { type StepProps } from '../../../../types.ts';
 import { useAppKitAccount, useDisconnect, useAppKit } from '@reown/appkit/react';
 import { useAppKitWallet } from '@reown/appkit-wallet-button/react';
 

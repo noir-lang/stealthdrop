@@ -6,9 +6,9 @@ import { useWaitForTransactionReceipt } from 'wagmi';
 import { useWriteContract } from 'wagmi';
 import addresses from '../../../deployment.json' with { type: 'json' };
 import abi from '../../../ethereum/artifacts/ethereum/contracts/AD.sol/AD.json' with { type: 'json' };
-import { type PlumeSignature } from '../../../../types.ts';
+import { type PlumeSignature } from '../../../types.ts';
 import { publicKeyToAddress } from 'viem/accounts';
-import { MESSAGE_TO_HASH } from '../../../../utils/const.cts';
+import { MESSAGE_TO_HASH } from '../../../const.cts';
 
 export function useClaim(plume: PlumeSignature | undefined, sender: `0x${string}`) {
   const [inputs, setInputs] = useState<any>();

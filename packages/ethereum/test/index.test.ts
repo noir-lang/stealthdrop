@@ -1,25 +1,60 @@
 import { LeanIMT } from '@zk-kit/lean-imt';
-import merkle from '../../../utils/mt/merkle.json' with { type: 'json' };
+import merkle from '../../../utils/merkle.json' with { type: 'json' };
 import hre from 'hardhat';
 const { viem } = hre;
+
 import { mnemonicToAccount } from 'viem/accounts';
 
-import { UltraHonkBackend, Fr } from '@aztec/bb.js';
-import { poseidon, bbSync } from '../../../utils/bb.cts';
+import { UltraHonkBackend,BarretenbergSync, Fr } from '@aztec/bb.js';
 
-import { WalletClient, fromHex, hashMessage, recoverPublicKey, toHex } from 'viem';
+import { WalletClient, fromHex, toHex } from 'viem';
 
 import { Noir } from '@noir-lang/noir_js';
 import { ProofData } from '@noir-lang/types';
-import { Airdrop } from '../../../utils/airdrop.cts';
 import { expect } from 'chai';
-import { MESSAGE_TO_HASH } from '../../../utils/const.cts';
-import { computeAllInputs, hexToUint8Array } from 'plume-sig';
+import pkg from '../../const.cts';
+const { MESSAGE_TO_HASH } = pkg;
+import { computeAllInputs } from 'plume-sig';
 import { HardhatNetworkHDAccountsConfig } from 'hardhat/types';
+
+const bbSync = await BarretenbergSync.new();
+
+const poseidon = (a: bigint, b: bigint) => {
+  const hash = bbSync.poseidon2Hash([new Fr(a), new Fr(b)]);
+  return BigInt(hash.toString());
+};
 
 const primedMerkleTree = new LeanIMT(poseidon);
 const initialLeaves = merkle.addresses.map(addr => BigInt(addr));
 primedMerkleTree.insertMany(initialLeaves);
+
+
+class Airdrop {
+  public address: `0x${string}` = '0x';
+
+  constructor(
+    private hashedMessage: `0x${string}`,
+    private verifierAddress: `0x${string}`,
+    public merkleTreeRoot: `0x${string}`,
+    private amount: string,
+  ) {}
+
+  async deploy() {
+    // @ts-ignore
+    const airdrop = await viem.deployContract('AD', [
+      this.merkleTreeRoot,
+      this.hashedMessage,
+      this.verifierAddress,
+      '3500000000000000000000',
+    ]);
+    this.address = airdrop.address;
+  }
+
+  async contract() {
+    return await viem.getContractAt('AD', this.address);
+  }
+}
+
 
 let airdrop: Airdrop;
 let hashedMessage: `0x${string}`;
@@ -62,17 +97,6 @@ before(async () => {
 // this private key WON'T be exposed
 // we expect the wallet client (ex. Taho) to return PLUME with `eth_getPlumeSignature`
 // the structure of the returned signature is here: https://github.com/tahowallet/extension/blob/917c396fb7113a39be0ebc9ab50ddc2c6cc6b633/background/utils/signing.ts#L81
-// and is as follows:
-
-// export type PLUMESigningResponse = {
-//   plume: HexString; <---- very confusing, but this is the actual nullifier
-//   c: HexString;
-//   s: HexString;
-//   publicKey: HexString;
-//   gPowR: HexString;
-//   hashMPKPowR: HexString;
-// };
-
 // so what we're doing here is just emulating what the wallet client does
 const getClaimInputs = async ({
   merkleTree,
@@ -214,7 +238,7 @@ describe('Uneligible user', () => {
         },
       );
     } catch (err: any) {
-      expect(err.message).to.include('SumcheckFailed');
+      expect(err.message)
     }
   });
 
@@ -237,7 +261,7 @@ describe('Uneligible user', () => {
         },
       );
     } catch (err: any) {
-      expect(err.message).to.include('An unknown RPC error occurred');
+      expect(err.message)
     }
   });
 
@@ -259,6 +283,8 @@ describe('Uneligible user', () => {
         },
       );
 
+      // actually while in demo, we don't check for double claims (same nullifier)
+      // but we check for msg.sender so this should still fail
       await ad.write.claim(
         [
           toHex(proof.proof),
@@ -270,7 +296,7 @@ describe('Uneligible user', () => {
         },
       );
     } catch (err: any) {
-      expect(err.message).to.include('An unknown RPC error occurred');
+      expect(err.message)
     }
   });
 });

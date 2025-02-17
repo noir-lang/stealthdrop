@@ -7,31 +7,25 @@
   ],
   "scripts": {
     "dev": "bun run --elide-lines 0 --filter @stealthdrop/webapp dev",
+    "build": "bun run --elide-lines 0 --filter @stealthdrop/webapp build",
     "node": "cd packages/ethereum && npx hardhat node",
-    "test": "bun run --filter @stealthdrop/ethereum test",
+    "test": "bun run --elide-lines 0 --filter @stealthdrop/ethereum test",
     "deploy": "bun run --elide-lines 0 --filter @stealthdrop/ethereum deploy",
-    "gen": "bun run utils/mt/generateAddresses.ts"
+    "gen": "bun run utils/generateAddresses.ts"
   },
   "dependencies": {
     "@aztec/bb.js": "0.67.0",
-    "@noir-lang/noir_js": "1.0.0-beta.1",
     "@nomicfoundation/hardhat-network-helpers": "1.0.12",
     "@nomicfoundation/hardhat-toolbox-viem": "3.0.0",
     "@nomicfoundation/hardhat-viem": "2.0.6",
-    "@reown/appkit": "^1.6.8",
-    "@reown/appkit-adapter-wagmi": "^1.6.8",
-    "@reown/appkit-wallet-button": "^1.6.8",
-    "@tanstack/react-query": "^5.66.0",
     "@zk-kit/lean-imt": "^2.2.2",
-    "dotenv": "^16.0.3",
     "hardhat": "^2.18.1",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-plugin-noir": "0.3.0-next.0",
     "react": "^18.2.0",
     "solidity-coverage": "^0.8.1",
     "ts-node": "^10.9.1",
-    "viem": "^2.23.2",
-    "wagmi": "^2.14.11"
+    "viem": "^2.23.2"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.2",
@@ -47,6 +41,13 @@
     "@aztec/bb.js": "0.67.0"
   },
   "trustedDependencies": [
-    "plume-sig"
+    "@swc/core",
+    "bufferutil",
+    "esbuild",
+    "keccak",
+    "plume-sig",
+    "secp256k1",
+    "sharp",
+    "utf-8-validate"
   ]
 }

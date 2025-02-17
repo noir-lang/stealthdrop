@@ -13,10 +13,9 @@ import fs from 'fs';
 import { resolve } from 'path';
 import { writeFileSync } from 'fs';
 import { Chain } from 'viem';
-import { LeanIMT } from '@zk-kit/lean-imt';
-import merkle from '../utils/mt/merkle.json' with { type: 'json' };
+import merkle from '../utils/merkle.json';
 import { toHex } from 'viem';
-import { MESSAGE_TO_HASH } from '../utils/const.cjs';
+import { MESSAGE_TO_HASH } from './const.cjs';
 
 subtask(TASK_COMPILE_SOLIDITY).setAction(async (_, { config }, runSuper) => {
   const superRes = await runSuper();
@@ -61,9 +60,9 @@ const config: HardhatUserConfig = {
   },
 };
 
-
 task('deploy', 'Deploys a verifier contract').setAction(async (_, hre) => {
   try {
+    const { LeanIMT } = await import('@zk-kit/lean-imt');
     const { BarretenbergSync, Fr } = await import('@aztec/bb.js');
     const bbSync = await BarretenbergSync.new();
 
@@ -85,6 +84,7 @@ task('deploy', 'Deploys a verifier contract').setAction(async (_, hre) => {
 
     const messageBytesHex = toHex(MESSAGE_TO_HASH, { size: 8 });
 
+    // @ts-ignore
     const airdrop = await hre.viem.deployContract('AD', [
       toHex(merkleTree.root, { size: 32 }),
       messageBytesHex,
@@ -99,13 +99,15 @@ task('deploy', 'Deploys a verifier contract').setAction(async (_, hre) => {
         verifier: verifier.address,
         airdrop: airdrop.address,
       },
-      networkConfig
+      networkConfig,
     };
 
     console.log(
       `Attached to address ${airdrop.address} with verifier ${verifier.address} at network ${hre.network.name} with chainId ${networkConfig.id}...`,
     );
-    writeFileSync(path.resolve(__dirname, 'deployment.json'), JSON.stringify(config), { flag: 'w' });
+    writeFileSync(path.resolve(__dirname, 'deployment.json'), JSON.stringify(config), {
+      flag: 'w',
+    });
   } catch (error) {
     console.error('Error deploying contracts: ', error);
   }
