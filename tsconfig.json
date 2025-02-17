@@ -26,5 +26,14 @@
     "files": true
   },
   "exclude": ["dist", "node_modules", "artifacts", "noir"],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.json", "hardhat.config.cts", "scripts/deploy.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.json",
+    "hardhat.config.cts",
+    "scripts/deploy.ts",
+    "utils/bb.cts",
+    "utils/airdrop.cts",
+    "utils/const.cts"
+  ]
 }

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--experimental-loader ts-node/esm/transpile-only' hardhat test",
-    "deploy": "hardhat compile && NODE_OPTIONS='--experimental-loader ts-node/esm/transpile-only --no-warnings=ExperimentalWarning' hardhat run --network ${NETWORK} scripts/deploy.ts"
+    "deploy": "hardhat vars set holesky ${DEPLOYER_PK} && hardhat deploy --network holesky"
   },
   "dependencies": {
     "@aztec/bb.js": "0.67.0",

@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
-import { LeanIMT, LeanIMTHashFunction } from '@zk-kit/lean-imt';
+import { LeanIMT } from '@zk-kit/lean-imt';
 import merkle from '../../../../utils/mt/merkle.json' with { type: 'json' };
+import { BarretenbergSync, Fr } from '@aztec/bb.js';
 
 export const MerkleTreeContext = createContext<LeanIMT | null>(null);
 
@@ -35,7 +36,13 @@ export function MerkleTreeProvider({ children }: { children: React.ReactNode }) 
     if (merkleTree) return;
 
     const initializeTree = async () => {
-      const { poseidon } = await import('../../../../utils/bb.ts');
+      const bbSync = await BarretenbergSync.new();
+
+      const poseidon = (a: bigint, b: bigint) => {
+        const hash = bbSync.poseidon2Hash([new Fr(a), new Fr(b)]);
+        return BigInt(hash.toString());
+      };
+
       const tree = new LeanIMT(poseidon);
 
       const initialLeaves = merkle.addresses.map(addr => BigInt(addr));

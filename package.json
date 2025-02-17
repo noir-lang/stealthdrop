@@ -6,10 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "NETWORK=localhost bun run deploy && bun run --filter @stealthdrop/webapp dev",
+    "dev": "bun run --elide-lines 0 --filter @stealthdrop/webapp dev",
     "node": "cd packages/ethereum && npx hardhat node",
     "test": "bun run --filter @stealthdrop/ethereum test",
-    "deploy": "bun run --filter @stealthdrop/ethereum deploy",
+    "deploy": "bun run --elide-lines 0 --filter @stealthdrop/ethereum deploy",
     "gen": "bun run utils/mt/generateAddresses.ts"
   },
   "dependencies": {

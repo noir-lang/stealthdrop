@@ -5,15 +5,15 @@ const { viem } = hre;
 import { mnemonicToAccount } from 'viem/accounts';
 
 import { UltraHonkBackend, Fr } from '@aztec/bb.js';
-import { poseidon, bbSync } from '../../../utils/bb.ts';
+import { poseidon, bbSync } from '../../../utils/bb.cts';
 
 import { WalletClient, fromHex, hashMessage, recoverPublicKey, toHex } from 'viem';
 
 import { Noir } from '@noir-lang/noir_js';
 import { ProofData } from '@noir-lang/types';
-import { Airdrop } from '../../../utils/airdrop.ts';
+import { Airdrop } from '../../../utils/airdrop.cts';
 import { expect } from 'chai';
-import { MESSAGE_TO_HASH } from '../../../utils/const.ts';
+import { MESSAGE_TO_HASH } from '../../../utils/const.cts';
 import { computeAllInputs, hexToUint8Array } from 'plume-sig';
 import { HardhatNetworkHDAccountsConfig } from 'hardhat/types';
 

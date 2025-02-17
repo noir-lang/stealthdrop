@@ -1,5 +1,5 @@
 import hre from 'hardhat';
-const { viem } = hre;
+const { viem } = hre as any;
 
 export class Airdrop {
   public address: `0x${string}` = '0x';

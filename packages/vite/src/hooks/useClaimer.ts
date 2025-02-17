@@ -3,12 +3,12 @@ import { useContext, useEffect, useState } from 'react';
 import { useProver } from './useProver.ts';
 import { MerkleTreeContext } from '../providers/merkleTree.tsx';
 import { useWaitForTransactionReceipt } from 'wagmi';
-import { useWriteContract, useAccount } from 'wagmi';
-import addresses from '../../../../utils/addresses.json' with { type: 'json' };
+import { useWriteContract } from 'wagmi';
+import addresses from '../../../deployment.json' with { type: 'json' };
 import abi from '../../../ethereum/artifacts/ethereum/contracts/AD.sol/AD.json' with { type: 'json' };
 import { type PlumeSignature } from '../../../../types.ts';
 import { publicKeyToAddress } from 'viem/accounts';
-import { MESSAGE_TO_HASH } from '../../../../utils/const.ts';
+import { MESSAGE_TO_HASH } from '../../../../utils/const.cts';
 
 export function useClaim(plume: PlumeSignature | undefined, sender: `0x${string}`) {
   const [inputs, setInputs] = useState<any>();
@@ -17,7 +17,7 @@ export function useClaim(plume: PlumeSignature | undefined, sender: `0x${string}
   const { prove, proof, setProof, status: proofStatus, setStatus } = useProver();
 
   const { writeContract, status: writeStatus, reset: resetWrite } = useWriteContract();
-  const { data, error, status: txStatus } = useWaitForTransactionReceipt({ hash: txHash });
+  const { data: txData, error, status: txStatus } = useWaitForTransactionReceipt({ hash: txHash });
   const [inputCalculationStatus, setInputCalculationStatus] = useState<
     'idle' | 'generating' | 'success' | 'error'
   >('idle');
@@ -27,7 +27,7 @@ export function useClaim(plume: PlumeSignature | undefined, sender: `0x${string}
 
     writeContract(
       {
-        address: addresses.ad as `0x${string}`,
+        address: addresses.addresses.airdrop as `0x${string}`,
         abi: abi.abi,
         functionName: 'claim',
         args: [
@@ -86,5 +86,5 @@ export function useClaim(plume: PlumeSignature | undefined, sender: `0x${string}
     resetWrite();
   };
 
-  return { claim, proofStatus, writeStatus, inputCalculationStatus, txStatus, proof, reset };
+  return { claim, proofStatus, writeStatus, inputCalculationStatus, txStatus, txData, proof, reset };
 }

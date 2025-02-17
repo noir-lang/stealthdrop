@@ -1,12 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button } from '../Button.tsx';
-import { CheckmarkIcon } from '../Icons/CheckmarkIcon.tsx';
 import { StepContainer } from './StepContainer.tsx';
 import { type StepProps } from '../../../../../types.ts';
-import { useAccount } from 'wagmi';
 import { useEligibleAddresses } from '../../hooks/useEligibleAddresses.tsx';
-import { MerkleTreeContext } from '../../providers/merkleTree.tsx';
-import { useAppKit, useDisconnect } from '@reown/appkit/react';
 
 export const SignMessageStep: React.FC<StepProps> = ({
   isOpen,
@@ -19,43 +15,8 @@ export const SignMessageStep: React.FC<StepProps> = ({
   plumeSign,
   plume,
 }) => {
-  const [selectedAccount, setSelectedAccount] = useState<`0x${string}` | null>(null);
-  const { addresses } = useAccount();
-  const { eligibleAddresses, nonEligibleAddresses, isLoading } = useEligibleAddresses(
-    addresses as `0x${string}`[],
-  );
-  const merkleTree = useContext(MerkleTreeContext);
-
-  const { open, close } = useAppKit();
-  const { disconnect } = useDisconnect();
-
-  if (!eligibleAddresses || eligibleAddresses.length === 0) {
-    return (
-      <StepContainer
-        number={number}
-        title={title}
-        description={description}
-        isOpen={isOpen}
-        onToggle={onToggle}
-        isCompleted={isCompleted || !!plume?.nullifier}
-      >
-        <span className="text-white text-base sm:text-lg">No eligible addresses found</span>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-          <Button
-            variant="yellow"
-            selected={false}
-            onClick={async () => {
-              await disconnect();
-              open();
-            }}
-            className="w-full sm:w-auto text-center"
-          >
-            Connect more addresses
-          </Button>
-        </div>
-      </StepContainer>
-    );
-  }
+  const { eligibleAddresses } = useEligibleAddresses([]);
+  const address = eligibleAddresses[0];
 
   return (
     <StepContainer
@@ -67,33 +28,20 @@ export const SignMessageStep: React.FC<StepProps> = ({
       isCompleted={isCompleted || !!plume?.nullifier}
     >
       <div className="space-y-4 sm:space-y-6">
-        {eligibleAddresses?.map((a: string) => {
-          const isEligible = merkleTree ? merkleTree.indexOf(BigInt(a)) !== -1 : false;
-          return (
-            <div key={a} className="flex flex-col gap-4">
-              <div
-                className={`flex items-center gap-4 p-3 sm:p-4 rounded-xl border border-white/10 cursor-pointer hover:border-[#E4BAFF] hover:bg-[#E4BAFF]/5 transition-colors ${
-                  !isEligible ? 'opacity-50' : ''
-                }`}
-                onClick={() => isEligible && setSelectedAccount(a as `0x${string}`)}
-              >
-                <input
-                  type="radio"
-                  checked={selectedAccount === a}
-                  readOnly
-                  disabled={!isEligible}
-                  className="w-4 sm:w-5 h-4 sm:h-5 accent-[#E4BAFF]"
-                />
-                <span className="text-white text-sm sm:text-base break-all">{a}</span>
-                {!isEligible && (
-                  <span className="text-red-400 text-sm sm:text-base ml-2 shrink-0">
-                    (Not eligible)
-                  </span>
-                )}
-              </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-start gap-4 p-3 sm:p-4 rounded-xl border border-white/10 bg-[#E4BAFF]/5 border-[#E4BAFF]">
+            <input
+              type="radio"
+              checked={true}
+              readOnly
+              className="w-4 sm:w-5 h-4 sm:h-5 accent-[#E4BAFF] mt-1"
+            />
+            <div className="flex flex-col items-start">
+              <span className="text-white text-sm sm:text-base">vitalik.eth</span>
+              <span className="text-[#B69DD0] text-xs sm:text-sm">{address}</span>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
       {!!plume?.nullifier && (
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-6">
@@ -107,15 +55,16 @@ export const SignMessageStep: React.FC<StepProps> = ({
         </div>
       )}
       {!plume?.nullifier && (
-        <Button
-          variant="yellow"
-          selected={!!selectedAccount}
-          disabled={!selectedAccount}
-          onClick={() => plumeSign?.(selectedAccount as `0x${string}`)}
-          className="mt-6 w-full sm:w-auto"
-        >
-          Sign message
-        </Button>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-6">
+          <Button
+            variant="yellow"
+            selected={true}
+            onClick={() => plumeSign?.(address as `0x${string}`)}
+            className="px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-white w-full sm:w-auto "
+          >
+            Sign message
+          </Button>
+        </div>
       )}
     </StepContainer>
   );

@@ -16,8 +16,11 @@ contract AD is ERC20 {
     mapping(bytes32 => bool) public nullifiers; // Keep track of claimed Merkle roots
     event TokensAirdropped(address indexed recipient, uint256 amount);
 
+    // while in demo mode, we don't check for double claims
+    // but let's add msg.sender so avoid spam
     modifier noDoubleClaim(bytes32 nullifier) {
-        require(!nullifiers[nullifier], DoubleClaim());
+        require(!nullifiers[bytes32(uint256(uint160(msg.sender)))], DoubleClaim());
+        // require(!nullifiers[nullifier], DoubleClaim());
         _;
     }
 
@@ -63,7 +66,10 @@ contract AD is ERC20 {
 
         _transfer(address(this), msg.sender, 3500000000000000000);
         emit TokensAirdropped(msg.sender, 3500000000000000000);
-        nullifiers[concatenateNullifier(nullifier_x, nullifier_y)] = true;
+
+        // while in demo mode, we don't check for double claims
+        // but let's add msg.sender so avoid spam
+        nullifiers[bytes32(uint256(uint160(msg.sender)))] = true;
     }
 
     function getRoot() public view returns (bytes32) {

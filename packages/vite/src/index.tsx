@@ -7,7 +7,7 @@ import initACVM from '@noir-lang/acvm_js';
 // @ts-ignore
 await Promise.all([initACVM(fetch(acvm)), initNoirC(fetch(noirc))]);
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { MerkleTreeProvider } from './providers/merkleTree.tsx';
 import StealthDropApp from './components/StealthDrop/StealthDropApp.tsx';
@@ -18,6 +18,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createAppKit } from '@reown/appkit/react';
 import { anvil, holesky, type AppKitNetwork } from '@reown/appkit/networks';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import deployment from '../../deployment.json' with { type: 'json' };
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const wagmiAdapter = new WagmiAdapter({
 createAppKit({
   adapters: [wagmiAdapter],
   networks: [networks[0], networks[1]], // Ensure array has at least one element
+  defaultNetwork: networks.find((n) => n.id === deployment.networkConfig.id),
   projectId,
   metadata,
   features: {

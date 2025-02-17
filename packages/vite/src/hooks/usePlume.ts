@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { computeAllInputs } from 'plume-sig';
-import { MESSAGE_TO_HASH } from '../../../../utils/const.ts';
+import { MESSAGE_TO_HASH } from '../../../../utils/const.cts';
 import { type PlumeSignature } from '../../../../types.ts';
 import eligible from '../../../../utils/mt/eligible.json' with { type: 'json' };
 

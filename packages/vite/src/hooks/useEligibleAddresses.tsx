@@ -20,10 +20,10 @@ export function useEligibleAddresses(addresses: Address[] | undefined): UseEligi
       };
     }
 
-    // Get all addresses from merkle.json
-    const eligibleAddresses = addresses?.filter(
-      address => merkleTree.indexOf(BigInt(address)) !== -1,
-    ) as `0x${string}`[];
+    // TODO: remove mock
+    // const eligibleAddresses = addresses?.filter(
+    //   address => merkleTree.indexOf(BigInt(address)) !== -1,
+    // ) as `0x${string}`[];
 
     // For now, we don't have a list of non-eligible addresses
     // This would typically come from your application's state or another source
@@ -31,7 +31,7 @@ export function useEligibleAddresses(addresses: Address[] | undefined): UseEligi
       addresses?.filter(address => merkleTree.indexOf(BigInt(address)) === -1) ?? [];
 
     return {
-      eligibleAddresses,
+      eligibleAddresses: ['0xe28b4B0C08a5A43529030A2F8444E4AEC00C9813'], // mock for demo
       nonEligibleAddresses,
       isLoading: false,
     };

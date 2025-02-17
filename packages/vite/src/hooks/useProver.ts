@@ -17,6 +17,7 @@ export function useProver() {
 
     // @ts-ignore
     const backend = new UltraHonkBackend(stealthdropCircuit.bytecode);
+    backend.getVerificationKey()
     const noir = new Noir(stealthdropCircuit as unknown as CompiledCircuit);
 
     const initializationTime = performance.now() - start;
