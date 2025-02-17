@@ -65,9 +65,6 @@ export const ConnectWalletStep: React.FC<StepProps> = ({
           Continue
         </Button>
       </div>
-      <p className="mt-4 text-sm text-gray-400 italic text-center sm:text-left">
-        Pro tip: Connect multiple addresses for a faster claim! 🚀
-      </p>
     </StepContainer>
   );
 };

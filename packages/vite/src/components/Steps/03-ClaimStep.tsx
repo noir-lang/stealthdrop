@@ -46,7 +46,7 @@ export const ClaimStep: React.FC<StepProps> = ({
               className="w-full sm:w-auto text-center"
             >
               Connect a different address
-            </Button>
+            </Button>{' '}
           </div>
         </div>
       );
@@ -55,14 +55,29 @@ export const ClaimStep: React.FC<StepProps> = ({
     return (
       <div className="space-y-4 sm:space-y-6">
         {accountSelector()}
+        <p className="mt-4 text-sm text-gray-400 italic text-center sm:text-left">
+          Heads up, you need around 0.0001 Holesky ETH to claim!
+          <br />
+          (takes around 10 seconds on the link below) 🚀
+        </p>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-6">
           <Button
             variant="yellow"
             onClick={claim}
             disabled={!plume}
-            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-[#32204F]"
+            className="text-white w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-[#32204F]"
           >
             {!plume ? 'Sign message first!' : 'Claim'}
+          </Button>{' '}
+          <Button
+            variant="purple"
+            selected={false}
+            onClick={() => {
+              window.open(`https://holesky-faucet.pk910.de`, '_blank');
+            }}
+            className="w-full sm:w-auto text-center text-white"
+          >
+            I need some Holesky ETH please!
           </Button>
         </div>
       </div>
