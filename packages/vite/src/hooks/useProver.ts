@@ -4,6 +4,14 @@ import { useState } from 'react';
 import type { CompiledCircuit } from '@noir-lang/noir_js';
 import stealthdropCircuit from '../../../noir/target/stealthdrop.json' with { type: 'json' };
 
+// @ts-ignore
+import acvm from '@noir-lang/acvm_js/web/acvm_js_bg.wasm?url';
+// @ts-ignore
+import noirc from '@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm?url';
+import initNoirC from '@noir-lang/noirc_abi';
+import initACVM from '@noir-lang/acvm_js';
+
+
 export function useProver() {
   const [proof, setProof] = useState<ProofData>();
   const [status, setStatus] = useState<'executing' | 'proving' | 'success' | 'error' | 'idle'>(
@@ -13,11 +21,14 @@ export function useProver() {
   const prove = async (inputs: any) => {
     const start = performance.now();
     setStatus('executing');
+
+    // @ts-ignore
+    await Promise.all([initACVM(fetch(acvm)), initNoirC(fetch(noirc))]);
+
     const { UltraHonkBackend } = await import('@aztec/bb.js');
 
     // @ts-ignore
     const backend = new UltraHonkBackend(stealthdropCircuit.bytecode);
-    backend.getVerificationKey()
     const noir = new Noir(stealthdropCircuit as unknown as CompiledCircuit);
 
     const initializationTime = performance.now() - start;

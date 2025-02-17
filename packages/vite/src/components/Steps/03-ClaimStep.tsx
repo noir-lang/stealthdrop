@@ -91,12 +91,39 @@ export const ClaimStep: React.FC<StepProps> = ({
   };
 
   const renderContent = () => {
-    if (
-      proofStatus === 'executing' ||
-      proofStatus === 'proving' ||
-      (proofStatus === 'success' && writeStatus === 'pending') ||
-      (proofStatus === 'success' && txStatus === 'pending')
-    ) {
+    if (proofStatus === 'idle' && writeStatus === 'idle') {
+      return handleNonEligibleAddresses();
+    } else if (proofStatus === 'success' && writeStatus === 'success' && txStatus === 'success') {
+      return (
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <Button
+            variant="green"
+            onClick={() => {
+              window.open(`https://holesky.beaconcha.in/tx/${txData?.transactionHash}`, '_blank');
+            }}
+            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-white flex items-center justify-center gap-2"
+          >
+            <CheckmarkIcon bg="none" />
+            Claim successful
+          </Button>
+        </div>
+      );
+    } else if (proofStatus === 'error' || writeStatus === 'error' || txStatus === 'error') {
+      return (
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <Button
+            onClick={() => {
+              reset();
+              resetForm?.();
+            }}
+            variant="red"
+            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-white"
+          >
+            Claim failed
+          </Button>
+        </div>
+      );
+    } else {
       return (
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
           <div className="space-y-4 sm:space-y-6">
@@ -131,38 +158,6 @@ export const ClaimStep: React.FC<StepProps> = ({
           </div>
         </div>
       );
-    } else if (proofStatus === 'success' && writeStatus === 'success' && txStatus === 'success') {
-      return (
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-          <Button
-            variant="green"
-            onClick={() => {
-              window.open(`https://holesky.beaconcha.in/tx/${txData?.transactionHash}`, '_blank');
-            }}
-            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-white flex items-center justify-center gap-2"
-          >
-            <CheckmarkIcon bg="none" />
-            Claim successful
-          </Button>
-        </div>
-      );
-    } else if (proofStatus === 'error' || writeStatus === 'error' || txStatus === 'error') {
-      return (
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-          <Button
-            onClick={() => {
-              reset();
-              resetForm?.();
-            }}
-            variant="red"
-            className="w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-white"
-          >
-            Claim failed
-          </Button>
-        </div>
-      );
-    } else {
-      return handleNonEligibleAddresses();
     }
   };
 

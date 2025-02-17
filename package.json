@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "bun run --elide-lines 0 --filter @stealthdrop/webapp dev",
     "build": "bun run --elide-lines 0 --filter @stealthdrop/webapp build",
+    "preview": "bun run --elide-lines 0 --filter @stealthdrop/webapp preview",
     "node": "cd packages/ethereum && npx hardhat node",
     "test": "bun run --elide-lines 0 --filter @stealthdrop/ethereum test",
     "deploy": "bun run --elide-lines 0 --filter @stealthdrop/ethereum deploy",

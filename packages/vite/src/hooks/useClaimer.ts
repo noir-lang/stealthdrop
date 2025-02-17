@@ -48,6 +48,7 @@ export function useClaim(plume: PlumeSignature | undefined, sender: `0x${string}
   }, [proof, sender]);
 
   const claim = async () => {
+    setStatus('executing');
     if (!plume || !sender || !merkleTree) return;
 
     const index = merkleTree.indexOf(
