@@ -30,7 +30,6 @@
     "hardhat": "^2.18.1",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-plugin-noir": "0.3.0-next.0",
-    "next": "latest",
     "plume-sig": "https://gitpkg.vercel.app/signorecello/zk-nullifier-sig/typescript?main&scripts.postinstall=npm%20run%20build",
     "postcss": "^8.5.1",
     "react": "^18.2.0",
