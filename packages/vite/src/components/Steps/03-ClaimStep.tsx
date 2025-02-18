@@ -64,7 +64,7 @@ export const ClaimStep: React.FC<StepProps> = ({
           <Button
             variant="yellow"
             onClick={claim}
-            disabled={!plume}
+            disabled={!plume || !selectedAccount}
             className="text-white w-full sm:w-auto px-4 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-normal text-[#32204F]"
           >
             {!plume ? 'Sign message first!' : 'Claim'}
