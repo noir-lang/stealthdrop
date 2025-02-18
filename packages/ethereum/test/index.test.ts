@@ -127,6 +127,7 @@ const getClaimInputs = async ({
   const messageBytes = MESSAGE_TO_HASH.split('').map((s, i) => MESSAGE_TO_HASH.charCodeAt(i));
   const privateKey = userAccount!.getHdKey().privateKey!;
   const plume = await computeAllInputs(Uint8Array.from(messageBytes), privateKey);
+
   const proof = merkleTree.generateProof(index);
   const pubKey = userAccount!.publicKey.slice(2);
 
