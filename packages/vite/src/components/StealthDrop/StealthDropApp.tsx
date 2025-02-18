@@ -9,7 +9,7 @@ const StealthDropApp: React.FC = () => {
   const [resetForm, setResetForm] = useState(() => () => {});
   const [showDemoModal, setShowDemoModal] = useState(true);
 
-  const { caipNetwork, caipNetworkId, chainId, switchNetwork } = useAppKitNetwork();
+  const { caipNetworkId, switchNetwork } = useAppKitNetwork();
 
   useEffect(() => {
     if (caipNetworkId !== 'eip155:80001') {

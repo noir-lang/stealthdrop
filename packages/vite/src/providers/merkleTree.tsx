@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 import { LeanIMT } from '@zk-kit/lean-imt';
 import merkle from '../../../../utils/merkle.json' with { type: 'json' };
-import { BarretenbergSync, Fr } from '@aztec/bb.js';
 
 export const MerkleTreeContext = createContext<LeanIMT | null>(null);
 
@@ -36,6 +35,7 @@ export function MerkleTreeProvider({ children }: { children: React.ReactNode }) 
     if (merkleTree) return;
 
     const initializeTree = async () => {
+      const { BarretenbergSync, Fr } = await import("@aztec/bb.js");
       const bbSync = await BarretenbergSync.new();
 
       const poseidon = (a: bigint, b: bigint) => {
@@ -56,13 +56,3 @@ export function MerkleTreeProvider({ children }: { children: React.ReactNode }) 
 
   return <MerkleTreeContext.Provider value={merkleTree}>{children}</MerkleTreeContext.Provider>;
 }
-
-// Add this to your global CSS or tailwind.config.js
-// @keyframes spin-reverse {
-//   from {
-//     transform: rotate(360deg);
-//   }
-//   to {
-//     transform: rotate(0deg);
-//   }
-// }

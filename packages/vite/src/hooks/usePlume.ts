@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { computeAllInputs } from 'plume-sig';
 import { MESSAGE_TO_HASH } from '../../../const.cts';
 import { type PlumeSignature } from '../../../types.ts';
 import eligible from '../../../../utils/eligible.json' with { type: 'json' };
@@ -17,6 +16,8 @@ export function usePlume() {
     const messageBytes = MESSAGE_TO_HASH.split('').map((s: string, i: number) =>
       MESSAGE_TO_HASH.charCodeAt(i),
     );
+    const { computeAllInputs } = await import('plume-sig');
+
     const plume = await computeAllInputs(Uint8Array.from(messageBytes), privateKey);
 
     setPlume({

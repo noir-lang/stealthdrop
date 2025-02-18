@@ -1,8 +1,11 @@
 import { Noir } from '@noir-lang/noir_js';
-import type { ProofData } from '@aztec/bb.js';
 import { useState } from 'react';
 import type { CompiledCircuit } from '@noir-lang/noir_js';
-import stealthdropCircuit from '../../../noir/target/stealthdrop.json' with { type: 'json' };
+
+export type ProofData = {
+  publicInputs: string[];
+  proof: Uint8Array;
+};
 
 // @ts-ignore
 import acvm from '@noir-lang/acvm_js/web/acvm_js_bg.wasm?url';
@@ -10,7 +13,6 @@ import acvm from '@noir-lang/acvm_js/web/acvm_js_bg.wasm?url';
 import noirc from '@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm?url';
 import initNoirC from '@noir-lang/noirc_abi';
 import initACVM from '@noir-lang/acvm_js';
-
 
 export function useProver() {
   const [proof, setProof] = useState<ProofData>();
@@ -20,15 +22,20 @@ export function useProver() {
 
   const prove = async (inputs: any) => {
     const start = performance.now();
+
     setStatus('executing');
+    const stealthdropCircuit = await import('../../../noir/target/stealthdrop.json');
 
     // @ts-ignore
     await Promise.all([initACVM(fetch(acvm)), initNoirC(fetch(noirc))]);
 
     const { UltraHonkBackend } = await import('@aztec/bb.js');
 
+    console.log('total threads', navigator.hardwareConcurrency);
     // @ts-ignore
-    const backend = new UltraHonkBackend(stealthdropCircuit.bytecode);
+    const backend = new UltraHonkBackend(stealthdropCircuit.bytecode, {
+      threads: navigator.hardwareConcurrency - 2,
+    });
     const noir = new Noir(stealthdropCircuit as unknown as CompiledCircuit);
 
     const initializationTime = performance.now() - start;
