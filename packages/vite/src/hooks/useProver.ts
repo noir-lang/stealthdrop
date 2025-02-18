@@ -31,10 +31,9 @@ export function useProver() {
 
     const { UltraHonkBackend } = await import('@aztec/bb.js');
 
-    console.log('total threads', navigator.hardwareConcurrency);
     // @ts-ignore
     const backend = new UltraHonkBackend(stealthdropCircuit.bytecode, {
-      threads: navigator.hardwareConcurrency - 2,
+      threads: navigator.hardwareConcurrency,
     });
     const noir = new Noir(stealthdropCircuit as unknown as CompiledCircuit);
 
